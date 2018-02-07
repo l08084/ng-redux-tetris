@@ -13,6 +13,9 @@ export class AppComponent {
   board: number[][]; // 盤面情報
   lose: boolean; // 一番上までいっちゃったかどうか
   interval: NodeJS.Timer; // ゲームを実行するタイマーを保持する変数
+  current: number[][]; // 今操作しているブロックの形
+  currentX: number;
+  currentY: number;
 
   // 操作するブロックのパターン
   shapes = [
@@ -65,8 +68,23 @@ export class AppComponent {
    * @memberof AppComponent
    */
   init() {
-    // 2次元配列を空にする
+    // 2次元配列に0をセット
     this.board = Array.from(new Array(20), () => new Array(10).fill(0));
   }
+  /**
+   * 新しい操作ブロックをセットする関数
+   * shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
+   *
+   * @memberof AppComponent
+   */
+  newShape() {
+      // ランダムにインデックスを出す
+      const id = Math.floor(Math.random() * this.shapes.length);
+      const shape = this.shapes[id];
+      // パターンを操作ブロックへセットする
+      this.current = [];
+      // 4 * 4の2次元配列を作成し、全部に0をセット
+      this.current = Array.from(new Array(4), () => new Array(4).fill(0));
+    }
 
 }
