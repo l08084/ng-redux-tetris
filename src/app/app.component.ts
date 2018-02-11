@@ -65,6 +65,89 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * ページが読み込まれた時の処理
+   *
+   * @memberof AppComponent
+   */
+  newGame() {
+    clearInterval(this.interval); // ゲームタイマーをクリア
+    this.init();
+    this.newShape();
+    this.lose = false;
+    this.interval = setInterval(this.tick, 250);
+  }
+
+  /**
+   * 盤面を空にする
+   *
+   * @memberof AppComponent
+   */
+  init() {
+    // 2次元配列に0をセット
+    this.board = Array.from(new Array(20), () => new Array(10).fill(0));
+  }
+
+  /**
+   * 新しい操作ブロックをセットする関数
+   * shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
+   *
+   * @memberof AppComponent
+   */
+  newShape() {
+    // ランダムにインデックスを出す
+    const id = Math.floor(Math.random() * this.shapes.length);
+    const shape = this.shapes[id];
+    // パターンを操作ブロックへセットする
+    this.current = [];
+    // 4 * 4の2次元配列を作成し、全部に0をセット
+    this.current = Array.from(new Array(4), () => new Array(4).fill(0));
+
+    // for (let y = 0 ; y < 4; ++y) {
+    //   for (let x = 0; x < 4; ++x) {
+    //     const i = 4 * y + x;
+    //     if (shape[i]) {
+    //       this.current[y][x] = id + 1;
+    //     }
+    //   }
+    // }
+    this.current.forEach((array, y) => {
+      array.forEach((currentItem, x) => {
+        const i = 4 * y + x;
+        if (shape[i]) {
+          currentItem = id + 1;
+        }
+      });
+    });
+
+    // ブロックを盤面の上の方にセットする
+    this.currentX = 5;
+    this.currentY = 0;
+  }
+
+  /**
+   * ゲームが始まると250秒毎に呼び出されていく関数(メインループ処理)
+   *
+   * @memberof AppComponent
+   */
+  tick() {
+    // 1つ下へ移動する
+    if (this.valid(0, 1)) {
+      this.currentY += 1;
+    } else {
+      // もし着地していたら(1つ下にブロックがあったら)
+      this.freeze(); // 操作ブロックを盤面へ固定する
+      this.clearLines(); // ライン消去処理
+      if (this.lose) {
+        // もしゲームオーバーなら最初から始める
+        this.newGame();
+        return false;
+      }
+      // 新しい操作ブロックをセットする
+      this.newShape();
+    }
+  }
+
+  /**
    * 盤面と操作ブロックを描画する
    *
    * @memberof AppComponent
@@ -100,89 +183,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                             this.blockHeight * y,
                             this.blockWidth - 1,
                             this.blockHeight - 1);
-  }
-
-  /**
-   * ページが読み込まれた時の処理
-   *
-   * @memberof AppComponent
-   */
-  newGame() {
-    clearInterval(this.interval); // ゲームタイマーをクリア
-    this.init();
-    this.newShape();
-    this.lose = false;
-    this.interval = setInterval(this.tick, 250);
-  }
-
-  /**
-   * 盤面を空にする
-   *
-   * @memberof AppComponent
-   */
-  init() {
-    // 2次元配列に0をセット
-    this.board = Array.from(new Array(20), () => new Array(10).fill(0));
-  }
-
-  /**
-   * 新しい操作ブロックをセットする関数
-   * shapesからランダムにブロックのパターンを出力し、盤面の一番上へセットする
-   *
-   * @memberof AppComponent
-   */
-  newShape() {
-      // ランダムにインデックスを出す
-      const id = Math.floor(Math.random() * this.shapes.length);
-      const shape = this.shapes[id];
-      // パターンを操作ブロックへセットする
-      this.current = [];
-      // 4 * 4の2次元配列を作成し、全部に0をセット
-      this.current = Array.from(new Array(4), () => new Array(4).fill(0));
-
-      // for (let y = 0 ; y < 4; ++y) {
-      //   for (let x = 0; x < 4; ++x) {
-      //     const i = 4 * y + x;
-      //     if (shape[i]) {
-      //       this.current[y][x] = id + 1;
-      //     }
-      //   }
-      // }
-      this.current.forEach((array, y) => {
-        array.forEach((currentItem, x) => {
-          const i = 4 * y + x;
-          if (shape[i]) {
-            currentItem = id + 1;
-          }
-        });
-      });
-
-      // ブロックを盤面の上の方にセットする
-      this.currentX = 5;
-      this.currentY = 0;
-    }
-
-  /**
-   * ゲームが始まると250秒毎に呼び出されていく関数(メインループ処理)
-   *
-   * @memberof AppComponent
-   */
-  tick() {
-    // 1つ下へ移動する
-    if (this.valid(0, 1)) {
-      this.currentY += 1;
-    } else {
-      // もし着地していたら(1つ下にブロックがあったら)
-      this.freeze(); // 操作ブロックを盤面へ固定する
-      this.clearLines(); // ライン消去処理
-      if (this.lose) {
-        // もしゲームオーバーなら最初から始める
-        this.newGame();
-        return false;
-      }
-      // 新しい操作ブロックをセットする
-      this.newShape();
-    }
   }
 
   /**
