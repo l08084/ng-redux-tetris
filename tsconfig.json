@@ -1,17 +1,16 @@
 {
   "compileOnSave": false,
-  // ここから
   "include": [
     "typings/index.d.ts"
   ],
-  // ここまでを追加
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true, // <- this add
+    "allowJs": true, // <- this add
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"

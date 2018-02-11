@@ -1,23 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
 
-  title = 'app';
-  cols = 10; // 横10マス
-  rows = 20; // 縦20マス
+  readonly cols = 10; // 横10マス
+  readonly rows = 20; // 縦20マス
+  readonly canpasWidth = 300;
+  readonly canpasHeight = 600;
+  readonly blockWidth = this.canpasWidth / this.cols; // マスの幅
+  readonly blockHeight = this.canpasHeight / this.rows; // マスの高さ
+
   board: number[][]; // 盤面情報
   lose: boolean; // 一番上までいっちゃったかどうか
   interval: NodeJS.Timer; // ゲームを実行するタイマーを保持する変数
   current: number[][]; // 今操作しているブロックの形
   currentX: number;
   currentY: number;
+  context: Canvas2DContextAttributes;
+
+  @ViewChild('block') block;
 
   // 操作するブロックのパターン
+  // tslint:disable-next-line:member-ordering
   shapes = [
     [1, 1, 1, 1],
     [1, 1, 1, 0,
@@ -34,6 +42,7 @@ export class AppComponent {
       1, 1, 1]
   ];
 
+  // tslint:disable-next-line:member-ordering
   colors = [
     'cyan',
     'orange',
@@ -44,9 +53,53 @@ export class AppComponent {
     'purple'
   ];
 
-  // tslint:disable-next-line:use-life-cycle-interface
+  ngAfterViewInit() {
+    const canvas = this.block.nativeElement;
+    this.context = canvas.getContext('2d');
+    // 30ミリ秒ごとに状態を描画する関数を呼び出す
+    setInterval(this.render, 30);
+  }
+
   ngOnInit() {
     this.newGame();
+  }
+
+  /**
+   * 盤面と操作ブロックを描画する
+   *
+   * @memberof AppComponent
+   */
+  render() {
+    const ctx = this.context;
+    if (ctx) {
+      ctx.clearRect(0, 0, this.canpasWidth, this.canpasHeight); // 一度キャンバスを真っさらにする
+      ctx.strokeStyle = 'black'; // えんぴつの色を黒にする
+      // for (let x = 0; x < this.cols; x += 1) {
+      //   for (let y = 0; y < this.rows; y += 1) {
+
+      //   }
+      // }
+      this.board.forEach((array, x) => {
+        array.forEach((element, y) => {
+          if (element) {
+            ctx.fillStyle = this.colors[element - 1];
+            this.drawBlock(this.currentX + x, this.currentY + y);
+          }
+        });
+      });
+    }
+  }
+
+  drawBlock(x: number, y: number) {
+    this.context.fillRect(this.blockWidth * x,
+                          this.blockHeight * y,
+                          this.blockWidth - 1,
+                          this.blockHeight - 1);
+
+    this.context.strokeRect(this.blockWidth * x,
+                            this.blockHeight * y,
+                            this.blockWidth - 1,
+                            this.blockHeight - 1);
   }
 
   /**
@@ -120,7 +173,7 @@ export class AppComponent {
       this.currentY += 1;
     } else {
       // もし着地していたら(1つ下にブロックがあったら)
-      this.freez(); // 操作ブロックを盤面へ固定する
+      this.freeze(); // 操作ブロックを盤面へ固定する
       this.clearLines(); // ライン消去処理
       if (this.lose) {
         // もしゲームオーバーなら最初から始める
@@ -132,6 +185,15 @@ export class AppComponent {
     }
   }
 
+  /**
+   * その方向へ操作ブロックを移動できるかどうかを返す
+   *
+   * @param {number} [offsetX=0]
+   * @param {number} [offsetY=0]
+   * @param {any} [newCurrent=this.current]
+   * @returns {boolean}
+   * @memberof AppComponent
+   */
   valid(offsetX = 0, offsetY = 0, newCurrent = this.current): boolean {
     offsetX = this.currentX + offsetX;
     offsetY = this.currentY + offsetY;
@@ -157,6 +219,51 @@ export class AppComponent {
       }
     }
     return true;
+  }
+
+  /**
+   * freeze関数は操作ブロックを盤面へセットする関数です。
+   * 操作ブロックが着地する際に呼び出されます。
+   *
+   * @memberof AppComponent
+   */
+  freeze() {
+    this.current.forEach((array, y) => {
+      array.forEach((currentItem, x) => {
+        if (currentItem) {
+          this.board[y + this.currentY][x + this.currentX] = currentItem;
+        }
+      });
+    });
+  }
+
+  /**
+   * 一行が揃っているか調べ、揃っていたらそれらを消す
+   *
+   * @memberof AppComponent
+   */
+  clearLines() {
+    for (let y = this.rows - 1; y >= 0; y -= 1) {
+      let rowFilled = true;
+      // 一行が揃っているか調べる
+      for (let x = 0; x < this.cols; x += 1) {
+        if (this.board[y][x] === 0) {
+          rowFilled = false;
+          break;
+        }
+      }
+      // もし一行揃っていたら, サウンドを鳴らしてそれらを消す。
+      if (rowFilled) {
+        document.getElementById('clearsound').play(); // 消滅サウンドを鳴らす
+        // その上にあったブロックを一つずつ落としていく
+        for (let yy = y; yy > 0; yy -= 1) {
+          for (let x = 0; x < this.cols; x += 1) {
+            this.board[yy][x] = this.board[yy - 1][x];
+          }
+        }
+        y += 1; // 一行落としたのでチェック処理を一つ下へ送る
+      }
+    }
   }
 
 }
