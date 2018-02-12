@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const canvas = this.block.nativeElement;
     this.context = canvas.getContext('2d');
     // 30ミリ秒ごとに状態を描画する関数を呼び出す
-    setInterval(this.render, 30);
+    setInterval(this.render(), 30);
   }
 
   ngOnInit() {
@@ -107,7 +107,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       array.forEach((currentItem, x) => {
         const i = 4 * y + x;
         if (shape[i]) {
-          currentItem = id + 1;
+          this.current[y][x] = id + 1;
         }
       });
     });
@@ -185,14 +185,27 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @memberof AppComponent
    */
   render() {
-    const ctx = this.context;
-    if (ctx) {
-      ctx.clearRect(0, 0, this.canpasWidth, this.canpasHeight); // 一度キャンバスを真っさらにする
-      ctx.strokeStyle = 'black'; // えんぴつの色を黒にする
+    if (this.context) {
+      this.context.clearRect(0, 0, this.canpasWidth, this.canpasHeight); // 一度キャンバスを真っさらにする
+      this.context.strokeStyle = 'black'; // えんぴつの色を黒にする
       this.board.forEach((array, x) => {
         array.forEach((element, y) => {
-          if (element) {
-            ctx.fillStyle = this.colors[element - 1];
+          if (element) { // マスが空、つまり0ではなかったら
+            // マスの種類に合わせて塗りつぶす色を設定
+            this.context.fillStyle = this.colors[element - 1];
+            // マスを描画
+            this.drawBlock(x, y);
+          }
+        });
+      });
+
+      // 操作ブロックを描画する
+      this.current.forEach((array, y) => {
+        array.forEach((currentItem, x) => {
+          if (currentItem) {
+            // マスの種類に合わせて塗りつぶす色を設定
+            this.context.fillStyle = this.colors[currentItem - 1];
+            // マスを描画
             this.drawBlock(this.currentX + x, this.currentY + y);
           }
         });
