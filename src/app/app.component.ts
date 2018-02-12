@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('block') block;
 
   // 操作するブロックのパターン
-  // tslint:disable-next-line:member-ordering
   shapes = [
     [1, 1, 1, 1],
     [1, 1, 1, 0,
@@ -106,7 +105,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.current.forEach((array, y) => {
       array.forEach((currentItem, x) => {
         const i = 4 * y + x;
-        if (shape[i]) {
+        if (typeof shape[i] !== 'undefined' && shape[i]) {
           this.current[y][x] = id + 1;
         }
       });
@@ -135,7 +134,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     for (let y = 0; y < 4; y += 1) {
       for (let x = 0; x < 4; x += 1) {
         if (newCurrent[y][x]) {
-         if (this.board[y + offsetY]
+         if (typeof this.board[y + offsetY] === 'undefined'
+            || typeof this.board[y + offsetY][x + offsetX] === 'undefined'
             || this.board[y + offsetY][x + offsetX]
             || x + offsetX < 0
             || y + offsetY >= this.rows
