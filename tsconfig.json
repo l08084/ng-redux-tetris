@@ -1,8 +1,8 @@
 {
   "compileOnSave": false,
-  "include": [
-    "typings/index.d.ts"
-  ],
+  // "include": [
+  //   "typings/index.d.ts"
+  // ],
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

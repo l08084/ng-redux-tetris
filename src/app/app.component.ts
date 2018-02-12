@@ -16,11 +16,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   board: number[][]; // 盤面情報
   lose: boolean; // 一番上までいっちゃったかどうか
-  interval: NodeJS.Timer; // ゲームを実行するタイマーを保持する変数
+  // interval: NodeJS.Timer; // ゲームを実行するタイマーを保持する変数
+  interval: any;
   current: number[][]; // 今操作しているブロックの形
   currentX: number;
   currentY: number;
-  context: Canvas2DContextAttributes;
+  context: CanvasRenderingContext2D;
 
   @ViewChild('block') block;
 
@@ -74,7 +75,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.init();
     this.newShape();
     this.lose = false;
-    this.interval = setInterval(this.tick, 250);
+    this.interval = setInterval(this.tick(), 250);
   }
 
   /**
@@ -102,14 +103,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     // 4 * 4の2次元配列を作成し、全部に0をセット
     this.current = Array.from(new Array(4), () => new Array(4).fill(0));
 
-    // for (let y = 0 ; y < 4; ++y) {
-    //   for (let x = 0; x < 4; ++x) {
-    //     const i = 4 * y + x;
-    //     if (shape[i]) {
-    //       this.current[y][x] = id + 1;
-    //     }
-    //   }
-    // }
     this.current.forEach((array, y) => {
       array.forEach((currentItem, x) => {
         const i = 4 * y + x;
@@ -125,13 +118,52 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * その方向へ操作ブロックを移動できるかどうかを返す
+   *
+   * @param {number} [offsetX=0]
+   * @param {number} [offsetY=0]
+   * @param {any} [newCurrent=this.current]
+   * @returns {boolean}
+   * @memberof AppComponent
+   */
+  isMobile(offsetX?: number, offsetY?: number, newCurrent?: number[][]): boolean {
+    offsetX = offsetX || 0;
+    offsetY = offsetY || 0;
+    newCurrent = newCurrent || this.current;
+    offsetX = this.currentX + offsetX;
+    offsetY = this.currentY + offsetY;
+    for (let y = 0; y < 4; y += 1) {
+      for (let x = 0; x < 4; x += 1) {
+        if (newCurrent[y][x]) {
+         if (this.board[y + offsetY]
+            || this.board[y + offsetY][x + offsetX]
+            || x + offsetX < 0
+            || y + offsetY >= this.rows
+            || x + offsetX >= this.cols) {
+              if (offsetY === 1
+                  && (offsetX - this.currentX) === 0
+                  && (offsetY - this.currentY) === 1
+                  ) {
+                    console.log('game over');
+                    // もし操作ブロックが盤面の上にあったらゲームオーバーにする
+                    this.lose = true;
+                  }
+              return false;
+            }
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
    * ゲームが始まると250秒毎に呼び出されていく関数(メインループ処理)
    *
    * @memberof AppComponent
    */
   tick() {
     // 1つ下へ移動する
-    if (this.valid(0, 1)) {
+    if (this.isMobile(0, 1)) {
       this.currentY += 1;
     } else {
       // もし着地していたら(1つ下にブロックがあったら)
@@ -157,11 +189,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (ctx) {
       ctx.clearRect(0, 0, this.canpasWidth, this.canpasHeight); // 一度キャンバスを真っさらにする
       ctx.strokeStyle = 'black'; // えんぴつの色を黒にする
-      // for (let x = 0; x < this.cols; x += 1) {
-      //   for (let y = 0; y < this.rows; y += 1) {
-
-      //   }
-      // }
       this.board.forEach((array, x) => {
         array.forEach((element, y) => {
           if (element) {
@@ -183,42 +210,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                             this.blockHeight * y,
                             this.blockWidth - 1,
                             this.blockHeight - 1);
-  }
-
-  /**
-   * その方向へ操作ブロックを移動できるかどうかを返す
-   *
-   * @param {number} [offsetX=0]
-   * @param {number} [offsetY=0]
-   * @param {any} [newCurrent=this.current]
-   * @returns {boolean}
-   * @memberof AppComponent
-   */
-  valid(offsetX = 0, offsetY = 0, newCurrent = this.current): boolean {
-    offsetX = this.currentX + offsetX;
-    offsetY = this.currentY + offsetY;
-    for (let y = 0; y < 4; y += 1) {
-      for (let x = 0; x < 4; x += 1) {
-        if (newCurrent[y][x]) {
-         if (this.board[y + offsetY]
-            || this.board[y + offsetY][x + offsetX]
-            || x + offsetX < 0
-            || y + offsetY >= this.rows
-            || x + offsetX >= this.cols) {
-              if (offsetY === 1
-                  && (offsetX - this.currentX) === 0
-                  && (offsetY - this.currentY) === 1
-                  ) {
-                    console.log('game over');
-                    // もし操作ブロックが盤面の上にあったらゲームオーバーにする
-                    this.lose = true;
-                  }
-              return false;
-            }
-        }
-      }
-    }
-    return true;
   }
 
   /**
@@ -254,7 +245,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
       // もし一行揃っていたら, サウンドを鳴らしてそれらを消す。
       if (rowFilled) {
-        document.getElementById('clearsound').play(); // 消滅サウンドを鳴らす
+        // document.getElementById('clearsound').play(); // 消滅サウンドを鳴らす
         // その上にあったブロックを一つずつ落としていく
         for (let yy = y; yy > 0; yy -= 1) {
           for (let x = 0; x < this.cols; x += 1) {
