@@ -1,4 +1,5 @@
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-root',
@@ -57,7 +58,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const canvas = this.block.nativeElement;
     this.context = canvas.getContext('2d');
     // 30ミリ秒ごとに状態を描画する関数を呼び出す
-    setInterval(this.render(), 30);
+    setInterval(() => this.render(), 30);
   }
 
   ngOnInit() {
@@ -74,7 +75,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.init();
     this.newShape();
     this.lose = false;
-    this.interval = setInterval(this.tick(), 250);
+    this.interval = setInterval(() => this.tick(), 250);
   }
 
   /**
