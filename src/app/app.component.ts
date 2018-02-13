@@ -101,16 +101,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     // パターンを操作ブロックへセットする
     this.current = [];
     // 4 * 4の2次元配列を作成し、全部に0をセット
-    this.current = Array.from(new Array(4), () => new Array(4).fill(0));
 
-    this.current.forEach((array, y) => {
-      array.forEach((currentItem, x) => {
+    for (let y = 0; y < 4; y += 1) {
+      this.current[y] = [];
+      for (let x = 0; x < 4; x += 1) {
         const i = 4 * y + x;
         if (typeof shape[i] !== 'undefined' && shape[i]) {
           this.current[y][x] = id + 1;
+        } else {
+          this.current[y][x] = 0;
         }
-      });
-    });
+      }
+    }
 
     // ブロックを盤面の上の方にセットする
     this.currentX = 5;
@@ -126,10 +128,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @returns {boolean}
    * @memberof AppComponent
    */
-  isMobile(offsetX?: number, offsetY?: number, newCurrent?: number[][]): boolean {
-    offsetX = offsetX || 0;
-    offsetY = offsetY || 0;
-    newCurrent = newCurrent || this.current;
+  isMobile(offsetX = 0, offsetY = 0, newCurrent = this.current): boolean {
     offsetX = this.currentX + offsetX;
     offsetY = this.currentY + offsetY;
     for (let y = 0; y < 4; y += 1) {
@@ -189,28 +188,30 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.context) {
       this.context.clearRect(0, 0, this.canpasWidth, this.canpasHeight); // 一度キャンバスを真っさらにする
       this.context.strokeStyle = 'black'; // えんぴつの色を黒にする
-      this.board.forEach((array, x) => {
-        array.forEach((element, y) => {
-          if (element) { // マスが空、つまり0ではなかったら
+
+      // 盤面を描画する
+      for (let x = 0; x < this.cols; x += 1) {
+        for (let y = 0; y < this.rows; y += 1) {
+          if (this.board[y][x]) { // マスが空、つまり0ではなかったら
             // マスの種類に合わせて塗りつぶす色を設定
-            this.context.fillStyle = this.colors[element - 1];
+            this.context.fillStyle = this.colors[this.board[y][x] - 1];
             // マスを描画
             this.drawBlock(x, y);
           }
-        });
-      });
+        }
+      }
 
       // 操作ブロックを描画する
-      this.current.forEach((array, y) => {
-        array.forEach((currentItem, x) => {
-          if (currentItem) {
+      for (let y = 0; y < 4; y += 1) {
+        for (let x = 0; x < 4; x += 1) {
+          if (this.current[y][x]) {
             // マスの種類に合わせて塗りつぶす色を設定
-            this.context.fillStyle = this.colors[currentItem - 1];
+            this.context.fillStyle = this.colors[this.current[y][x] - 1];
             // マスを描画
             this.drawBlock(this.currentX + x, this.currentY + y);
           }
-        });
-      });
+        }
+      }
     }
   }
 
@@ -233,13 +234,13 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @memberof AppComponent
    */
   freeze() {
-    this.current.forEach((array, y) => {
-      array.forEach((currentItem, x) => {
-        if (currentItem) {
-          this.board[y + this.currentY][x + this.currentX] = currentItem;
+    for (let y = 0; y < 4; y += 1) {
+      for (let x = 0; x < 4; x += 1) {
+        if (this.current[y][x]) {
+          this.board[y + this.currentY][x + this.currentX] = this.current[y][x];
         }
-      });
-    });
+      }
+    }
   }
 
   /**
