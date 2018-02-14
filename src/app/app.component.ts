@@ -1,12 +1,14 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/observable/fromEvent';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly cols = 10; // 横10マス
   readonly rows = 20; // 縦20マス
@@ -14,6 +16,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   readonly canpasHeight = 600;
   readonly blockWidth = this.canpasWidth / this.cols; // マスの幅
   readonly blockHeight = this.canpasHeight / this.rows; // マスの高さ
+
+  subscription: Subscription;
 
   board: number[][]; // 盤面情報
   lose: boolean; // 一番上までいっちゃったかどうか
@@ -63,6 +67,18 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.newGame();
+    this.subscription = Observable.fromEvent(document, 'keydown').subscribe((e: KeyboardEvent) => {
+      this.keyPress(e);
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  keyPress(event: KeyboardEvent) {
+    console.log(event.code);
+
   }
 
   /**
