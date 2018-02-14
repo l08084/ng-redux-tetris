@@ -78,7 +78,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   keyPress(event: KeyboardEvent) {
     console.log(event.code);
-
   }
 
   /**
