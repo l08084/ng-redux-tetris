@@ -2,6 +2,7 @@ import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
+import { ControllerService } from './services/controller.service';
 
 @Component({
   selector: 'app-root',
@@ -58,6 +59,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     'purple'
   ];
 
+  constructor(private controllerService: ControllerService) { }
+
   ngAfterViewInit() {
     const canvas = this.block.nativeElement;
     this.context = canvas.getContext('2d');
@@ -77,7 +80,46 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   keyPress(event: KeyboardEvent) {
-    console.log(event.code);
+    switch (event.code) {
+      case 'ArrowLeft':
+       if (this.isMobile(-1)) {
+         this.currentX -= 1; // 左に一つずらす
+         this.render();
+       }
+        break;
+      case 'ArrowRight':
+        if (this.isMobile(1)) {
+          this.currentX += 1; // 右に一つずらす
+          this.render();
+        }
+         break;
+      case 'ArrowDown':
+         if (this.isMobile(0, 1)) {
+           this.currentY += 1; // 右に一つずらす
+           this.render();
+         }
+          break;
+      case 'Space':
+        const rotated = this.rotate(this.current);
+        if (this.isMobile(0, 0, rotated)) {
+          this.current = rotated;  // 回せる場合は回したあとの状態に操作ブロックをセットする
+          this.render();
+         }
+         break;
+      default:
+        break;
+    }
+  }
+
+  rotate(current: number[][]) {
+    const newCurrent = [];
+    for (let y = 0; y < 4; y += 1) {
+      newCurrent[y] = [];
+      for (let x = 0; x < 4; x += 1) {
+        newCurrent[y][x] = current[3 - x][y];
+      }
+    }
+    return newCurrent;
   }
 
   /**
