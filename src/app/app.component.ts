@@ -7,16 +7,16 @@ import { ControllerService } from './services/controller.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly cols = 10; // 横10マス
   private readonly rows = 20; // 縦20マス
-  private readonly canpasWidth = 300;
-  private readonly canpasHeight = 600;
-  private readonly blockWidth = this.canpasWidth / this.cols; // マスの幅
-  private readonly blockHeight = this.canpasHeight / this.rows; // マスの高さ
+  private readonly campasWidth = 300;
+  private readonly campasHeight = 600;
+  private readonly blockWidth = this.campasWidth / this.cols; // マスの幅
+  private readonly blockHeight = this.campasHeight / this.rows; // マスの高さ
   private readonly colors = [
     'cyan',
     'orange',
@@ -53,12 +53,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private currentY: number;
   private context: CanvasRenderingContext2D;
 
-  @ViewChild('block') block;
+  @ViewChild('campas') campas;
 
   constructor(private controllerService: ControllerService) { }
 
   ngAfterViewInit() {
-    const canvas = this.block.nativeElement;
+    const canvas = this.campas.nativeElement;
     this.context = canvas.getContext('2d');
     // 30ミリ秒ごとに状態を描画する関数を呼び出す
     setInterval(() => this.render(), 30);
@@ -239,7 +239,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   render() {
     if (this.context) {
-      this.context.clearRect(0, 0, this.canpasWidth, this.canpasHeight); // 一度キャンバスを真っさらにする
+      this.context.clearRect(0, 0, this.campasWidth, this.campasHeight); // 一度キャンバスを真っさらにする
       this.context.strokeStyle = 'black'; // えんぴつの色を黒にする
 
       // 盤面を描画する

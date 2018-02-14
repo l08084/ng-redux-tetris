@@ -1,0 +1,13 @@
+canvas {
+    display: block;
+    margin: auto;
+    border: 1px solid black;
+}
+
+.how-control {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 300px;
+    align-items: center;
+}
