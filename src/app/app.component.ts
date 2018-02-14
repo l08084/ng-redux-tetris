@@ -17,15 +17,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly campasHeight = 600;
   private readonly blockWidth = this.campasWidth / this.cols; // マスの幅
   private readonly blockHeight = this.campasHeight / this.rows; // マスの高さ
-  private readonly colors = [
-    'cyan',
-    'orange',
-    'blue',
-    'yelow',
-    'red',
-    'green',
-    'purple'
-  ];
   // 操作するブロックのパターン
   private readonly shapes = [
     [1, 1, 1, 1],
@@ -240,14 +231,14 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   render() {
     if (this.context) {
       this.context.clearRect(0, 0, this.campasWidth, this.campasHeight); // 一度キャンバスを真っさらにする
-      this.context.strokeStyle = 'black'; // えんぴつの色を黒にする
+      this.context.strokeStyle = '#FFFF66'; // えんぴつの色を黒にする
 
       // 盤面を描画する
       for (let x = 0; x < this.cols; x += 1) {
         for (let y = 0; y < this.rows; y += 1) {
           if (this.board[y][x]) { // マスが空、つまり0ではなかったら
             // マスの種類に合わせて塗りつぶす色を設定
-            this.context.fillStyle = this.colors[this.board[y][x] - 1];
+            this.context.fillStyle = '#18A03C';
             // マスを描画
             this.drawBlock(x, y);
           }
@@ -259,7 +250,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         for (let x = 0; x < 4; x += 1) {
           if (this.current[y][x]) {
             // マスの種類に合わせて塗りつぶす色を設定
-            this.context.fillStyle = this.colors[this.current[y][x] - 1];
+            this.context.fillStyle = '#18A03C';
             // マスを描画
             this.drawBlock(this.currentX + x, this.currentY + y);
           }

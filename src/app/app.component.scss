@@ -1,7 +1,7 @@
 canvas {
     display: block;
     margin: auto;
-    border: 1px solid black;
+    border: 3px solid #FFFF66;
 }
 
 .how-control {
@@ -10,4 +10,6 @@ canvas {
     margin: auto;
     width: 300px;
     align-items: center;
+    font-weight: bold;
+    color: #FFFF66;
 }
