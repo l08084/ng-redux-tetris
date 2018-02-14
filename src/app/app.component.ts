@@ -11,28 +11,23 @@ import { ControllerService } from './services/controller.service';
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  readonly cols = 10; // 横10マス
-  readonly rows = 20; // 縦20マス
-  readonly canpasWidth = 300;
-  readonly canpasHeight = 600;
-  readonly blockWidth = this.canpasWidth / this.cols; // マスの幅
-  readonly blockHeight = this.canpasHeight / this.rows; // マスの高さ
-
-  subscription: Subscription;
-
-  board: number[][]; // 盤面情報
-  lose: boolean; // 一番上までいっちゃったかどうか
-  // interval: NodeJS.Timer; // ゲームを実行するタイマーを保持する変数
-  interval: any;
-  current: number[][]; // 今操作しているブロックの形
-  currentX: number;
-  currentY: number;
-  context: CanvasRenderingContext2D;
-
-  @ViewChild('block') block;
-
+  private readonly cols = 10; // 横10マス
+  private readonly rows = 20; // 縦20マス
+  private readonly canpasWidth = 300;
+  private readonly canpasHeight = 600;
+  private readonly blockWidth = this.canpasWidth / this.cols; // マスの幅
+  private readonly blockHeight = this.canpasHeight / this.rows; // マスの高さ
+  private readonly colors = [
+    'cyan',
+    'orange',
+    'blue',
+    'yelow',
+    'red',
+    'green',
+    'purple'
+  ];
   // 操作するブロックのパターン
-  shapes = [
+  private readonly shapes = [
     [1, 1, 1, 1],
     [1, 1, 1, 0,
       1],
@@ -48,16 +43,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       1, 1, 1]
   ];
 
-  // tslint:disable-next-line:member-ordering
-  colors = [
-    'cyan',
-    'orange',
-    'blue',
-    'yelow',
-    'red',
-    'green',
-    'purple'
-  ];
+  private subscription: Subscription;
+
+  private board: number[][]; // 盤面情報
+  private lose: boolean; // 一番上までいっちゃったかどうか
+  private interval: any; // ゲームを実行するタイマーを保持する変数
+  private current: number[][]; // 今操作しているブロックの形
+  private currentX: number;
+  private currentY: number;
+  private context: CanvasRenderingContext2D;
+
+  @ViewChild('block') block;
 
   constructor(private controllerService: ControllerService) { }
 
@@ -317,7 +313,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       // もし一行揃っていたら, サウンドを鳴らしてそれらを消す。
       if (rowFilled) {
-        // document.getElementById('clearsound').play(); // 消滅サウンドを鳴らす
         // その上にあったブロックを一つずつ落としていく
         for (let yy = y; yy > 0; yy -= 1) {
           for (let x = 0; x < this.cols; x += 1) {
