@@ -4,8 +4,13 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
-import { rootReducer, IAppState, INITIAL_STATE } from '../store';
-import { TetrisActions } from './app.actions';
+import { IAppState, INITIAL_STATE, rootReducer } from '../../state/store';
+import { TetrisActions } from '../../state/actions';
+import { Store, createStore } from 'redux';
+
+export const store: Store<IAppState> = createStore(
+  rootReducer,
+);
 
 @NgModule({
   declarations: [
@@ -15,7 +20,9 @@ import { TetrisActions } from './app.actions';
     BrowserModule,
     NgReduxModule,
   ],
-  providers: [],
+  providers: [
+    TetrisActions,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
@@ -23,8 +30,8 @@ export class AppModule {
     // Tell @angular-redux/store about our rootReducer and our initial state.
     // It will use this to create a redux store for us and wire up all the
     // events.
-    ngRedux.configureStore(
-      rootReducer,
+    ngRedux.configureStore(rootReducer,
       INITIAL_STATE);
+    // ngRedux.provideStore(store);
   }
 }

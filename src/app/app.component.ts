@@ -4,19 +4,52 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
 import { MyConstant } from './constant';
 
+import { select } from '@angular-redux/store';
+import { TetrisActions } from '../../state/actions';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
-  ngOnInit() {
-    console.log(MyConstant.COLS);
-    console.log(MyConstant.ROWS);
+
+  @select() readonly board$: Observable<number[][]>;
+  private interval: any; // ゲームを実行するタイマーを保持する変数
+  private subscription: Subscription;
+
+  constructor(private tetrisAction: TetrisActions) {
+    // this.subscription = this.board$.subscribe(console.log);
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
+
+  ngOnInit() {
+    this.newGame();
+  }
+
+  /**
+   * ページが読み込まれた時の処理
+   *
+   * @memberof AppComponent
+   */
+  newGame() {
+    clearInterval(this.interval); // ゲームタイマーをクリア
+    this.tetrisAction.callInitBoard();
+  }
+
+  /**
+   * 盤面を空にする
+   *
+   * @memberof AppComponent
+   */
+  init() {
+    // 2次元配列に0をセット
+    // this.board = Array.from(new Array(20), () => new Array(10).fill(0));
+  }
+
   ngAfterViewInit() {}
 
   // private readonly cols = 10; // 横10マス
