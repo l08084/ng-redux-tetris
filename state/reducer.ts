@@ -1,6 +1,9 @@
 import { IAppState } from './store';
 import { Action } from 'redux';
-import { TetrisActions, InitBoardAction, InitCurrentAction } from './actions';
+import { TetrisActions,
+         NumberMultidimensionalArrayAction,
+         InsertShapeToCurrentAction, 
+         NumberAction} from './actions';
 
 export function rootReducer(
     lastState: IAppState,
@@ -8,22 +11,52 @@ export function rootReducer(
 ): IAppState {
     switch (action.type) {
         case TetrisActions.INIT_BOARD:
-        return {
-            board: (action as InitBoardAction).payload,
-            lose: lastState.lose,
-            current: lastState.current,
-            currentX: lastState.currentX,
-            currentY: lastState.currentY
-        };
+            return {
+                board: (action as NumberMultidimensionalArrayAction).payload,
+                lose: lastState.lose,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: lastState.currentY
+            };
         case TetrisActions.INIT_CURRENT:
-        return {
-            board: lastState.board,
-            lose: lastState.lose,
-            current: (action as InitCurrentAction).payload,
-            currentX: lastState.currentX,
-            currentY: lastState.currentY
-        };
-      default:
-        return lastState;
+            return {
+                board: lastState.board,
+                lose: lastState.lose,
+                current: (action as NumberMultidimensionalArrayAction).payload,
+                currentX: lastState.currentX,
+                currentY: lastState.currentY
+            };
+        case TetrisActions.INSERT_SHAPE_TO_CURRENT:
+            const x = (action as InsertShapeToCurrentAction).payload.x;
+            const y = (action as InsertShapeToCurrentAction).payload.y;
+            const id = (action as InsertShapeToCurrentAction).payload.id;
+            // 配列の値渡し
+            const newCurrent = lastState.current.concat();
+            newCurrent[y][x] = id;
+            return {
+                board: lastState.board,
+                lose: lastState.lose,
+                current: newCurrent,
+                currentX: lastState.currentX,
+                currentY: lastState.currentY
+            };
+        case TetrisActions.SET_CURRENT_X:
+            return {
+                board: lastState.board,
+                lose: lastState.lose,
+                current: lastState.current,
+                currentX: (action as NumberAction).payload,
+                currentY: lastState.currentY
+            };
+        case TetrisActions.SET_CURRENT_Y:
+            return {
+                board: lastState.board,
+                lose: lastState.lose,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: (action as NumberAction).payload
+            };
+        default:
+            return lastState;
     }
 }

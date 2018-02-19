@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Action } from 'redux';
+import { Action, Store } from 'redux';
 import { FluxStandardAction } from 'flux-standard-action';
 import { dispatch, NgRedux } from '@angular-redux/store';
 import { IAppState } from './store';
 import { InsertShapeToCurrentParam } from '../src/app/model';
 
-export type InitBoardAction = FluxStandardAction<number[][], void>;
-export type InitCurrentAction = FluxStandardAction<number[][], void>;
+export type NumberAction = FluxStandardAction<number, void>;
+export type NumberMultidimensionalArrayAction = FluxStandardAction<number[][], void>;
 export type InsertShapeToCurrentAction = FluxStandardAction<InsertShapeToCurrentParam, void>;
 
 @Injectable()
@@ -14,6 +14,8 @@ export class TetrisActions {
   static readonly INIT_BOARD = 'INIT_BOARD';
   static readonly INIT_CURRENT = 'INIT_CURRENT';
   static readonly INSERT_SHAPE_TO_CURRENT = 'INSERT_SHAPE_TO_CURRENT';
+  static readonly SET_CURRENT_X = 'SET_CURRENT_X';
+  static readonly SET_CURRENT_Y = 'SET_CURRENT_Y';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -27,13 +29,13 @@ export class TetrisActions {
     this.initCurrent(current);
   }
 
-  @dispatch() initBoard = (board: number[][]): InitBoardAction => ({
+  @dispatch() initBoard = (board: number[][]): NumberMultidimensionalArrayAction => ({
       type: TetrisActions.INIT_BOARD,
       payload: board,
       meta: undefined
   })
 
-  @dispatch() initCurrent = (current: number[][]): InitCurrentAction => ({
+  @dispatch() initCurrent = (current: number[][]): NumberMultidimensionalArrayAction => ({
     type: TetrisActions.INIT_CURRENT,
     payload: current,
     meta: undefined
@@ -43,6 +45,18 @@ export class TetrisActions {
     = (insertShapeToCurrentParam: InsertShapeToCurrentParam): InsertShapeToCurrentAction => ({
     type: TetrisActions.INSERT_SHAPE_TO_CURRENT,
     payload: insertShapeToCurrentParam,
+    meta: undefined
+  })
+
+  @dispatch() setCurrentX = (currentX: number): NumberAction => ({
+    type: TetrisActions.SET_CURRENT_X,
+    payload: currentX,
+    meta: undefined
+  })
+
+  @dispatch() setCurrentY = (currentY: number): NumberAction => ({
+    type: TetrisActions.SET_CURRENT_Y,
+    payload: currentY,
     meta: undefined
   })
 }
