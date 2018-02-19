@@ -13,24 +13,6 @@ export const INITIAL_STATE: IAppState = {
     board: null, // 盤面情報
     lose: false, // 一番上までいっちゃったかどうか
     current: null, // 今操作しているブロックの形
-    currentX: null,
-    currentY: null
+    currentX: null, // ブロックの現在の座標
+    currentY: null // ブロックの現在の座標
 };
-
-export function rootReducer(
-    lastState: IAppState,
-    action: Action
-): IAppState {
-    switch (action.type) {
-        case TetrisActions.INIT_BOARD:
-        return {
-            board: (action as InitBoardAction).payload,
-            lose: lastState.lose,
-            current: lastState.current,
-            currentX: lastState.currentX,
-            currentY: lastState.currentY
-        };
-      default:
-        return lastState;
-    }
-}

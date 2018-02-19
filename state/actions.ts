@@ -4,18 +4,15 @@ import { FluxStandardAction } from 'flux-standard-action';
 import { dispatch, NgRedux } from '@angular-redux/store';
 import { IAppState } from './store';
 
-export type VoidAction = FluxStandardAction<void, void>;
 export type InitBoardAction = FluxStandardAction<number[][], void>;
 
 @Injectable()
 export class TetrisActions {
   static readonly INIT_BOARD = 'INIT_BOARD';
 
-  constructor(private ngRedux: NgRedux<IAppState>) {}
-
   callInitBoard = (): void => {
+    // 2次元配列に0を代入する
     const board = Array.from(new Array(20), () => new Array(10).fill(0));
-    // this.ngRedux.dispatch(this.initBoard(board));
     this.initBoard(board);
   }
 
@@ -24,5 +21,4 @@ export class TetrisActions {
       payload: board,
       meta: undefined
     })
-
 }
