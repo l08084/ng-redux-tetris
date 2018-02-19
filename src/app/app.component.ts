@@ -7,6 +7,7 @@ import { MyConstant } from './constant';
 import { select, NgRedux } from '@angular-redux/store';
 import { TetrisActions } from '../../state/actions';
 import { IAppState } from '../../state/store';
+import { TetrisService } from './services/tetris.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private interval: any; // ゲームを実行するタイマーを保持する変数
   private subscription: Subscription;
 
-  constructor(private tetrisAction: TetrisActions) {
+  constructor(
+    private tetrisAction: TetrisActions,
+    private tetrisService: TetrisService) {
     this.subscription = this.board$.subscribe(console.log);
   }
 
@@ -40,9 +43,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     clearInterval(this.interval); // ゲームタイマーをクリア
     // 盤面を空にする
     this.tetrisAction.callInitBoard();
+    this.tetrisService.newShape();
   }
 
   ngAfterViewInit() {}
+
 
   // /**
   //  * 盤面を空にする
