@@ -17,7 +17,7 @@ import { TetrisService } from './services/tetris.service';
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @select() readonly board$: Observable<number[][]>;
-  private interval: any; // ゲームを実行するタイマーを保持する変数
+
   private subscription: Subscription;
 
   constructor(
@@ -31,19 +31,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.newGame();
-  }
-
-  /**
-   * ページが読み込まれた時の処理
-   *
-   * @memberof AppComponent
-   */
-  newGame() {
-    clearInterval(this.interval); // ゲームタイマーをクリア
-    // 盤面を空にする
-    this.tetrisAction.callInitBoard();
-    this.tetrisService.newShape();
+    this.tetrisService.newGame();
   }
 
   ngAfterViewInit() {}

@@ -3,7 +3,8 @@ import { Action } from 'redux';
 import { TetrisActions,
          NumberMultidimensionalArrayAction,
          InsertShapeToCurrentAction, 
-         NumberAction} from './actions';
+         NumberAction,
+         BooleanAction} from './actions';
 
 export function rootReducer(
     lastState: IAppState,
@@ -13,7 +14,7 @@ export function rootReducer(
         case TetrisActions.INIT_BOARD:
             return {
                 board: (action as NumberMultidimensionalArrayAction).payload,
-                lose: lastState.lose,
+                isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: lastState.currentX,
                 currentY: lastState.currentY
@@ -21,7 +22,7 @@ export function rootReducer(
         case TetrisActions.INIT_CURRENT:
             return {
                 board: lastState.board,
-                lose: lastState.lose,
+                isLose: lastState.isLose,
                 current: (action as NumberMultidimensionalArrayAction).payload,
                 currentX: lastState.currentX,
                 currentY: lastState.currentY
@@ -35,7 +36,7 @@ export function rootReducer(
             newCurrent[y][x] = id;
             return {
                 board: lastState.board,
-                lose: lastState.lose,
+                isLose: lastState.isLose,
                 current: newCurrent,
                 currentX: lastState.currentX,
                 currentY: lastState.currentY
@@ -43,7 +44,7 @@ export function rootReducer(
         case TetrisActions.SET_CURRENT_X:
             return {
                 board: lastState.board,
-                lose: lastState.lose,
+                isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: (action as NumberAction).payload,
                 currentY: lastState.currentY
@@ -51,10 +52,18 @@ export function rootReducer(
         case TetrisActions.SET_CURRENT_Y:
             return {
                 board: lastState.board,
-                lose: lastState.lose,
+                isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: lastState.currentX,
                 currentY: (action as NumberAction).payload
+            };
+        case TetrisActions.SET_IS_LOSE:
+            return {
+                board: lastState.board,
+                isLose: (action as BooleanAction).payload,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: lastState.currentY
             };
         default:
             return lastState;

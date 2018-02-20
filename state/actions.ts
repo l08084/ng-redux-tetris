@@ -6,6 +6,7 @@ import { IAppState } from './store';
 import { InsertShapeToCurrentParam } from '../src/app/model';
 
 export type NumberAction = FluxStandardAction<number, void>;
+export type BooleanAction = FluxStandardAction<boolean, void>;
 export type NumberMultidimensionalArrayAction = FluxStandardAction<number[][], void>;
 export type InsertShapeToCurrentAction = FluxStandardAction<InsertShapeToCurrentParam, void>;
 
@@ -16,6 +17,7 @@ export class TetrisActions {
   static readonly INSERT_SHAPE_TO_CURRENT = 'INSERT_SHAPE_TO_CURRENT';
   static readonly SET_CURRENT_X = 'SET_CURRENT_X';
   static readonly SET_CURRENT_Y = 'SET_CURRENT_Y';
+  static readonly SET_IS_LOSE = 'SET_IS_LOSE';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -48,15 +50,21 @@ export class TetrisActions {
     meta: undefined
   })
 
-  @dispatch() setCurrentX = (currentX: number): NumberAction => ({
+  @dispatch() setCurrentX = (positionX: number): NumberAction => ({
     type: TetrisActions.SET_CURRENT_X,
-    payload: currentX,
+    payload: positionX,
     meta: undefined
   })
 
-  @dispatch() setCurrentY = (currentY: number): NumberAction => ({
+  @dispatch() setCurrentY = (positionY: number): NumberAction => ({
     type: TetrisActions.SET_CURRENT_Y,
-    payload: currentY,
+    payload: positionY,
+    meta: undefined
+  })
+
+  @dispatch() setIsLose = (isLose: boolean): BooleanAction => ({
+    type: TetrisActions.SET_IS_LOSE,
+    payload: isLose,
     meta: undefined
   })
 }
