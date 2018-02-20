@@ -3,3 +3,8 @@ export interface InsertShapeToCurrentParam {
     y: number;
     id: number;
 }
+
+export interface Point {
+    x: number;
+    y: number;
+}

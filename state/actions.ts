@@ -3,12 +3,14 @@ import { Action, Store } from 'redux';
 import { FluxStandardAction } from 'flux-standard-action';
 import { dispatch, NgRedux } from '@angular-redux/store';
 import { IAppState } from './store';
-import { InsertShapeToCurrentParam } from '../src/app/model';
+import { InsertShapeToCurrentParam, Point } from '../src/app/model';
 
+export type VoidAction = FluxStandardAction<void, void>;
 export type NumberAction = FluxStandardAction<number, void>;
 export type BooleanAction = FluxStandardAction<boolean, void>;
 export type NumberMultidimensionalArrayAction = FluxStandardAction<number[][], void>;
 export type InsertShapeToCurrentAction = FluxStandardAction<InsertShapeToCurrentParam, void>;
+export type FreezeAction = FluxStandardAction<Point, void>;
 
 @Injectable()
 export class TetrisActions {
@@ -18,6 +20,8 @@ export class TetrisActions {
   static readonly SET_CURRENT_X = 'SET_CURRENT_X';
   static readonly SET_CURRENT_Y = 'SET_CURRENT_Y';
   static readonly SET_IS_LOSE = 'SET_IS_LOSE';
+  static readonly INCREMENT_CURRENT_Y = 'INCREMENT_CURRENT_Y';
+  static readonly FREEZE = 'FREEZE';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -65,6 +69,18 @@ export class TetrisActions {
   @dispatch() setIsLose = (isLose: boolean): BooleanAction => ({
     type: TetrisActions.SET_IS_LOSE,
     payload: isLose,
+    meta: undefined
+  })
+
+  @dispatch() incrementCurrentY = (): VoidAction => ({
+    type: TetrisActions.INCREMENT_CURRENT_Y,
+    payload: undefined,
+    meta: undefined
+  })
+
+  @dispatch() freeze = (point: Point): FreezeAction => ({
+    type: TetrisActions.FREEZE,
+    payload: undefined,
     meta: undefined
   })
 }

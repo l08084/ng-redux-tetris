@@ -21,7 +21,7 @@ export class TetrisService {
    *
    * @memberof TetrisService
    */
-  newGame() {
+  newGame = (): void => {
     // clearInterval(this.interval); // ゲームタイマーをクリア
     this.intervalSubscription.unsubscribe();
     // 盤面を空にする
@@ -38,7 +38,7 @@ export class TetrisService {
    *
    * @memberof TetrisService
    */
-  newShape() {
+  newShape = (): void => {
     // ランダムにインデックスを出す
     const id = Math.floor(Math.random() * MyConstant.SHAPES.length);
     const shape = MyConstant.SHAPES[id];
@@ -62,5 +62,79 @@ export class TetrisService {
     this.tetrisAction.setCurrentX(5);
     this.tetrisAction.setCurrentY(0);
   }
+
+  /**
+   * ゲームが始まると250ミリ秒毎に呼び出されていく関数(メインループ処理)
+   *
+   * @memberof TetrisService
+   */
+  tick = (): void => {
+    // 1つ下へ移動する
+    if (this.isValid(0, 1)) {
+      this.tetrisAction.incrementCurrentY();
+    } else {
+      // もし着地していたら(1つ下にブロックがあったら)
+      this.callFreeze(); // 操作ブロックを盤面へ固定する
+    }
+  }
+
+  /**
+   * freeze関数は操作ブロックを盤面へセットする関数です。
+   * 操作ブロックが着地する際に呼び出されます。
+   *
+   * @memberof TetrisService
+   */
+  callFreeze = (): void => {
+    for (let y = 0; y < 4; y += 1) {
+      for (let x = 0; x < 4; x += 1) {
+        // if (this.current[y][x]) {
+        //   this.board[y + this.currentY][x + this.currentX] = this.current[y][x];
+        // }
+        this.tetrisAction.freeze({
+          x: x,
+          y: y
+        });
+      }
+    }
+  }
+
+    // /**
+  //  * ゲームが始まると250秒毎に呼び出されていく関数(メインループ処理)
+  //  *
+  //  * @memberof AppComponent
+  //  */
+  // tick() {
+  //   // 1つ下へ移動する
+  //   if (this.isMobile(0, 1)) {
+  //     this.currentY += 1;
+  //   } else {
+  //     // もし着地していたら(1つ下にブロックがあったら)
+  //     this.freeze(); // 操作ブロックを盤面へ固定する
+  //     this.clearLines(); // ライン消去処理
+  //     if (this.lose) {
+  //       // もしゲームオーバーなら最初から始める
+  //       this.newGame();
+  //       return false;
+  //     }
+  //     // 新しい操作ブロックをセットする
+  //     this.newShape();
+  //   }
+  // }
+
+  // /**
+  //  * freeze関数は操作ブロックを盤面へセットする関数です。
+  //  * 操作ブロックが着地する際に呼び出されます。
+  //  *
+  //  * @memberof AppComponent
+  //  */
+  // freeze() {
+  //   for (let y = 0; y < 4; y += 1) {
+  //     for (let x = 0; x < 4; x += 1) {
+  //       if (this.current[y][x]) {
+  //         this.board[y + this.currentY][x + this.currentX] = this.current[y][x];
+  //       }
+  //     }
+  //   }
+  // }
 
 }

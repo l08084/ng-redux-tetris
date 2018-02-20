@@ -1,8 +1,9 @@
 import { IAppState } from './store';
 import { Action } from 'redux';
 import { TetrisActions,
+         FreezeAction,
          NumberMultidimensionalArrayAction,
-         InsertShapeToCurrentAction, 
+         InsertShapeToCurrentAction,
          NumberAction,
          BooleanAction} from './actions';
 
@@ -64,6 +65,29 @@ export function rootReducer(
                 current: lastState.current,
                 currentX: lastState.currentX,
                 currentY: lastState.currentY
+            };
+        case TetrisActions.INCREMENT_CURRENT_Y:
+            const newCurrentY = lastState.currentY + 1;
+            return {
+                board: lastState.board,
+                isLose: lastState.isLose,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: newCurrentY
+            };
+        case TetrisActions.FREEZE:
+            const newBoard = lastState.board.concat();
+            const point = (action as FreezeAction).payload;
+            if (lastState.current[point.y][point.x]) {
+                newBoard[point.y + lastState.currentY][point.x + lastState.currentX]
+                    = lastState.current[point.y][point.x];
+            }
+            return {
+                board: newBoard,
+                isLose: lastState.isLose,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: newCurrentY
             };
         default:
             return lastState;
