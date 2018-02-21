@@ -3,16 +3,19 @@ import { MyConstant } from '../constant';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
+import 'rxjs/add/observable/combineLatest';
 import { TetrisActions } from '../../../state/actions';
 import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class TetrisService {
 
-  // private interval: any; // ゲームを実行するタイマーを保持する変数
   private intervalSubscription: Subscription;
 
   @select() readonly board$: Observable<number[][]>;
+  @select() readonly current$: Observable<number[][]>;
+  @select() readonly currentX$: Observable<number>;
+  @select() readonly currentY$: Observable<number>;
 
   constructor(private tetrisAction: TetrisActions) { }
 
@@ -70,13 +73,17 @@ export class TetrisService {
    */
   tick = (): void => {
     // 1つ下へ移動する
-    if (this.isValid(0, 1)) {
-      this.tetrisAction.incrementCurrentY();
-    } else {
-      // もし着地していたら(1つ下にブロックがあったら)
-      this.callFreeze(); // 操作ブロックを盤面へ固定する
-      this.tetrisAction.clearLines(); // ライン消去処理
-    }
+    this.isValid(0, 1).subscribe(
+      valid => {
+        if (valid) {
+          this.tetrisAction.incrementCurrentY();
+        } else {
+          // もし着地していたら(1つ下にブロックがあったら)
+          this.callFreeze(); // 操作ブロックを盤面へ固定する
+          this.tetrisAction.clearLines(); // ライン消去処理
+        }
+      }
+    );
   }
 
   /**
@@ -94,6 +101,42 @@ export class TetrisService {
         });
       }
     }
+  }
+
+  isValid = (offsetX = 0, offsetY = 0, newCurrent$ = this.current$): Observable<boolean> => {
+    return Observable.combineLatest(
+      newCurrent$,
+      this.currentX$,
+      this.currentY$,
+      this.board$,
+      (newCurrent, currentX, currentY, board) => {
+        offsetX = currentX + offsetX;
+        offsetY = currentY + offsetY;
+        for (let y = 0; y < 4; y += 1) {
+          for (let x = 0; x < 4; x += 1) {
+            if (newCurrent[y][x]) {
+             if (typeof board[y + offsetY] === 'undefined'
+                || typeof board[y + offsetY][x + offsetX] === 'undefined'
+                || board[y + offsetY][x + offsetX]
+                || x + offsetX < 0
+                || y + offsetY >= MyConstant.ROWS
+                || x + offsetX >= MyConstant.COLS) {
+                  if (offsetY === 1
+                      && (offsetX - currentX) === 0
+                      && (offsetY - currentY) === 1
+                      ) {
+                        console.log('game over');
+                        // もし操作ブロックが盤面の上にあったらゲームオーバーにする
+                        this.tetrisAction.setIsLose(true);
+                      }
+                  return false;
+                }
+            }
+          }
+        }
+        return true;
+      }
+    );
   }
 
 }
