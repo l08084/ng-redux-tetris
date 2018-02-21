@@ -22,6 +22,7 @@ export class TetrisActions {
   static readonly SET_IS_LOSE = 'SET_IS_LOSE';
   static readonly INCREMENT_CURRENT_Y = 'INCREMENT_CURRENT_Y';
   static readonly FREEZE = 'FREEZE';
+  static readonly CLEAR_LINES = 'CLEAR_LINES';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -80,6 +81,12 @@ export class TetrisActions {
 
   @dispatch() freeze = (point: Point): FreezeAction => ({
     type: TetrisActions.FREEZE,
+    payload: undefined,
+    meta: undefined
+  })
+
+  @dispatch() clearLines = (): VoidAction => ({
+    type: TetrisActions.CLEAR_LINES,
     payload: undefined,
     meta: undefined
   })

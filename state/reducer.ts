@@ -6,6 +6,7 @@ import { TetrisActions,
          InsertShapeToCurrentAction,
          NumberAction,
          BooleanAction} from './actions';
+import { MyConstant } from '../src/app/constant';
 
 export function rootReducer(
     lastState: IAppState,
@@ -89,6 +90,33 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: newCurrentY
             };
+        case TetrisActions.CLEAR_LINES:
+          const newBoard_b = lastState.board.concat();
+          for (let yy = MyConstant.ROWS - 1; yy >= 0; yy -= 1) {
+              let rowFilled = true;
+              for (let xx = 0; xx < MyConstant.COLS; xx += 1) {
+                  if (newBoard_b[yy][xx] === 0) {
+                      rowFilled = false;
+                      break;
+                  }
+              }
+              if (rowFilled) {
+                  // その上にあったブロックを一つずつ落としていく
+                  for (let yyy = yy; yyy > 0; yyy -= 1) {
+                    for (let xx = 0; xx < this.cols; xx += 1) {
+                      newBoard_b[yyy][xx]  = newBoard_b[yyy - 1][xx];
+                    }
+                  }
+                  yy += 1; // 一行落としたのでチェック処理を一つ下へ送る
+              }
+          }
+          return {
+              board: newBoard_b,
+              isLose: lastState.isLose,
+              current: lastState.current,
+              currentX: lastState.currentX,
+              currentY: newCurrentY
+          };
         default:
             return lastState;
     }
