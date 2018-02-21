@@ -2,12 +2,14 @@ import { Component, ViewChild, AfterViewInit, OnInit, OnDestroy } from '@angular
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/interval';
 import { MyConstant } from './constant';
 
 import { select, NgRedux } from '@angular-redux/store';
 import { TetrisActions } from '../../state/actions';
 import { IAppState } from '../../state/store';
 import { TetrisService } from './services/tetris.service';
+import { RenderService } from './services/render.service';
 
 @Component({
   selector: 'app-root',
@@ -17,12 +19,15 @@ import { TetrisService } from './services/tetris.service';
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @select() readonly board$: Observable<number[][]>;
+  @ViewChild('campas') campas;
 
   private subscription: Subscription;
 
   constructor(
     private tetrisAction: TetrisActions,
-    private tetrisService: TetrisService) {
+    private tetrisService: TetrisService,
+    private renderService: RenderService,
+  ) {
     this.subscription = this.board$.subscribe(console.log);
   }
 
@@ -34,8 +39,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tetrisService.newGame();
   }
 
-  ngAfterViewInit() {}
-
+  ngAfterViewInit() {
+    const canvas = this.campas.nativeElement;
+    const context = canvas.getContext('2d');
+    this.renderService.setContext(context);
+    // 30ミリ秒ごとに状態を描画する関数を呼び出す
+    Observable.interval(30).subscribe(() => this.renderService.render());
+  }
 
   // /**
   //  * 盤面を空にする

@@ -16,6 +16,7 @@ export class TetrisService {
   @select() readonly current$: Observable<number[][]>;
   @select() readonly currentX$: Observable<number>;
   @select() readonly currentY$: Observable<number>;
+  @select() readonly isLose$: Observable<boolean>;
 
   constructor(private tetrisAction: TetrisActions) { }
 
@@ -25,7 +26,6 @@ export class TetrisService {
    * @memberof TetrisService
    */
   newGame = (): void => {
-    // clearInterval(this.interval); // ゲームタイマーをクリア
     this.intervalSubscription.unsubscribe();
     // 盤面を空にする
     this.tetrisAction.callInitBoard();
@@ -56,7 +56,8 @@ export class TetrisService {
           this.tetrisAction.insertShapeToCurrent({
             x: x,
             y: y,
-            id: id + 1});
+            id: id + 1
+          });
         }
       }
     }
@@ -72,18 +73,26 @@ export class TetrisService {
    * @memberof TetrisService
    */
   tick = (): void => {
-    // 1つ下へ移動する
-    this.isValid(0, 1).subscribe(
-      valid => {
+    Observable.combineLatest(
+      this.isValid(0, 1),
+      this.isLose$,
+      (valid, isLose) => {
         if (valid) {
           this.tetrisAction.incrementCurrentY();
         } else {
           // もし着地していたら(1つ下にブロックがあったら)
           this.callFreeze(); // 操作ブロックを盤面へ固定する
           this.tetrisAction.clearLines(); // ライン消去処理
+          if (isLose) {
+            // もしゲームオーバーなら最初から始める
+            this.newGame();
+            return false;
+          }
+          // 新しい操作ブロックをセットする
+          this.newShape();
         }
       }
-    );
+    ).subscribe().unsubscribe();
   }
 
   /**
