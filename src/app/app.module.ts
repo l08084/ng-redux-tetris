@@ -9,6 +9,7 @@ import { TetrisActions } from '../../state/actions';
 import { Store, createStore } from 'redux';
 import { rootReducer } from '../../state/reducer';
 import { TetrisService } from './services/tetris.service';
+import { RenderService } from './services/render.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { TetrisService } from './services/tetris.service';
   providers: [
     TetrisActions,
     TetrisService,
+    RenderService,
   ],
   bootstrap: [AppComponent]
 })

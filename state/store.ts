@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { TetrisActions, InitBoardAction } from '../state/actions';
+import { TetrisActions } from '../state/actions';
 
 export interface IAppState {
     board: number[][]; // 盤面情報

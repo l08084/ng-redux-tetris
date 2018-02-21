@@ -26,7 +26,9 @@ export class TetrisService {
    * @memberof TetrisService
    */
   newGame = (): void => {
-    this.intervalSubscription.unsubscribe();
+    if (this.intervalSubscription) {
+      this.intervalSubscription.unsubscribe();
+    }
     // 盤面を空にする
     this.tetrisAction.callInitBoard();
     this.newShape();

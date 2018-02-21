@@ -7,6 +7,7 @@ import { TetrisActions,
          NumberAction,
          BooleanAction} from './actions';
 import { MyConstant } from '../src/app/constant';
+import { Point } from '../src/app/model';
 
 export function rootReducer(
     lastState: IAppState,
@@ -78,8 +79,8 @@ export function rootReducer(
             };
         case TetrisActions.FREEZE:
             const newBoard = lastState.board.concat();
-            const point = (action as FreezeAction).payload;
-            if (lastState.current[point.y][point.x]) {
+            const point: Point = (action as FreezeAction).payload;
+            if (point && lastState.current[point.y][point.x]) {
                 newBoard[point.y + lastState.currentY][point.x + lastState.currentX]
                     = lastState.current[point.y][point.x];
             }

@@ -27,9 +27,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private tetrisAction: TetrisActions,
     private tetrisService: TetrisService,
     private renderService: RenderService,
-  ) {
-    this.subscription = this.board$.subscribe(console.log);
-  }
+  ) {}
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
