@@ -57,7 +57,7 @@ export class RenderService {
           }
         }
       }
-    );
+    ).subscribe().unsubscribe();
   }
 
   drawBlock = (x: number, y: number): void => {

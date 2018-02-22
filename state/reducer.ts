@@ -89,7 +89,7 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: lastState.currentX,
-                currentY: newCurrentY
+                currentY: lastState.currentY,
             };
         case TetrisActions.CLEAR_LINES:
           const newBoard_b = lastState.board.concat();
@@ -116,7 +116,7 @@ export function rootReducer(
               isLose: lastState.isLose,
               current: lastState.current,
               currentX: lastState.currentX,
-              currentY: newCurrentY
+              currentY: lastState.currentY
           };
         default:
             return lastState;

@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   @select() readonly board$: Observable<number[][]>;
   @ViewChild('campas') campas;
 
-  private subscription: Subscription;
+  private renderSubscription: Subscription;
 
   constructor(
     private tetrisAction: TetrisActions,
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.renderSubscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -42,7 +42,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const context = canvas.getContext('2d');
     this.renderService.setContext(context);
     // 30ミリ秒ごとに状態を描画する関数を呼び出す
-    Observable.interval(30).subscribe(() => this.renderService.render());
+    this.renderSubscription = Observable.interval(30)
+      .subscribe(() => this.renderService.render());
   }
 
   // /**
