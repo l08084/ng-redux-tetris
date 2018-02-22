@@ -10,6 +10,7 @@ import { TetrisActions } from '../../state/actions';
 import { IAppState } from '../../state/store';
 import { TetrisService } from './services/tetris.service';
 import { RenderService } from './services/render.service';
+import { ControllerService } from './services/controller.service';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     private tetrisAction: TetrisActions,
     private tetrisService: TetrisService,
     private renderService: RenderService,
+    private controllerService: ControllerService,
   ) {}
 
   ngOnDestroy() {
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.tetrisService.newGame();
+    this.controllerService.init();
   }
 
   ngAfterViewInit() {
