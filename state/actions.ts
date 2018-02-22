@@ -81,7 +81,7 @@ export class TetrisActions {
 
   @dispatch() freeze = (point: Point): FreezeAction => ({
     type: TetrisActions.FREEZE,
-    payload: undefined,
+    payload: point,
     meta: undefined
   })
 

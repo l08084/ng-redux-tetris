@@ -35,8 +35,8 @@ export class RenderService {
       this.currentY$,
       (board, current, currentX, currentY) => {
         // 盤面を描画する
-        for (let x = 0; x < MyConstant.ROWS; x += 1) {
-          for (let y = 0; y < MyConstant.COLS; y += 1) {
+        for (let x = 0; x < MyConstant.COLS; x += 1) {
+          for (let y = 0; y < MyConstant.ROWS; y += 1) {
             if (board[y][x]) { // マスが空、つまり0ではなかったら
               this.context.fillStyle = '#18A03C';
               // マスを描画

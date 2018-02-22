@@ -75,26 +75,6 @@ export class TetrisService {
    * @memberof TetrisService
    */
   tick = (): void => {
-    // Observable.combineLatest(
-    //   this.isValid(0, 1),
-    //   this.isLose$,
-    //   (valid, isLose) => {
-    //     if (valid) {
-    //       this.tetrisAction.incrementCurrentY();
-    //     } else {
-    //       // もし着地していたら(1つ下にブロックがあったら)
-    //       this.callFreeze(); // 操作ブロックを盤面へ固定する
-    //       this.tetrisAction.clearLines(); // ライン消去処理
-    //       if (isLose) {
-    //         // もしゲームオーバーなら最初から始める
-    //         this.newGame();
-    //         return false;
-    //       }
-    //       // 新しい操作ブロックをセットする
-    //       this.newShape();
-    //     }
-    //   }
-    // ).subscribe().unsubscribe();
       this.isLose$.subscribe(isLose => {
         if (this.isValid(0, 1)) {
           this.tetrisAction.incrementCurrentY();

@@ -10,7 +10,7 @@ export class MyConstant {
     // マスの幅
     public static readonly BLOCK_WIDTH = MyConstant.BOARD_WIDTH / MyConstant.COLS;
     // マスの高さ
-    public static readonly BLOCK_HEIGHT = MyConstant.BOARD_WIDTH / MyConstant.COLS;
+    public static readonly BLOCK_HEIGHT = MyConstant.BOARD_HEIGHT / MyConstant.ROWS;
     // 操作するブロックのパターン
     public static readonly SHAPES =
         [
