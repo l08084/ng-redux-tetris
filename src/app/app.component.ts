@@ -20,6 +20,7 @@ import { ControllerService } from './services/controller.service';
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @select() readonly board$: Observable<number[][]>;
+  @select() readonly score$: Observable<number>;
   @ViewChild('campas') campas;
 
   private renderSubscription: Subscription;

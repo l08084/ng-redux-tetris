@@ -22,6 +22,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: 0
             };
         case TetrisActions.SET_CURRENT:
             return {
@@ -31,6 +32,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.INSERT_SHAPE_TO_CURRENT:
             const x = (action as InsertShapeToCurrentAction).payload.x;
@@ -46,6 +48,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.SET_CURRENT_X:
             return {
@@ -55,6 +58,7 @@ export function rootReducer(
                 currentX: (action as NumberAction).payload,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.SET_CURRENT_Y:
             return {
@@ -64,6 +68,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: (action as NumberAction).payload,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.SET_IS_LOSE:
             return {
@@ -73,6 +78,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.INCREMENT_CURRENT_X:
             const newCurrentX = lastState.currentX + 1;
@@ -83,6 +89,7 @@ export function rootReducer(
                 currentX: newCurrentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.DECREMENT_CURRENT_X:
             const newCurrentX_b = lastState.currentX - 1;
@@ -93,6 +100,7 @@ export function rootReducer(
                 currentX: newCurrentX_b,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.INCREMENT_CURRENT_Y:
             const newCurrentY = lastState.currentY + 1;
@@ -103,6 +111,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: newCurrentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.FREEZE:
             const newBoard = lastState.board.concat();
@@ -118,9 +127,11 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
+                score: lastState.score
             };
         case TetrisActions.CLEAR_LINES:
           const newBoard_b = lastState.board.concat();
+          let newScore = lastState.score;
           for (let yy = MyConstant.ROWS - 1; yy >= 0; yy -= 1) {
               let rowFilled = true;
               for (let xx = 0; xx < MyConstant.COLS; xx += 1) {
@@ -130,6 +141,7 @@ export function rootReducer(
                   }
               }
               if (rowFilled) {
+                  newScore += 10;
                   // その上にあったブロックを一つずつ落としていく
                   for (let yyy = yy; yyy > 0; yyy -= 1) {
                     for (let xx = 0; xx < MyConstant.COLS; xx += 1) {
@@ -146,6 +158,7 @@ export function rootReducer(
               currentX: lastState.currentX,
               currentY: lastState.currentY,
               rotated: lastState.rotated,
+              score: newScore
           };
         case TetrisActions.ROTATE:
         const newRotated = [];
@@ -162,6 +175,7 @@ export function rootReducer(
               currentX: lastState.currentX,
               currentY: lastState.currentY,
               rotated: newRotated,
+              score: lastState.score
           };
         default:
             return lastState;

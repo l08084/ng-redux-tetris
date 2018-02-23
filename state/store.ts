@@ -8,6 +8,7 @@ export interface IAppState {
     currentX: number; // ブロックの現在の座標
     currentY: number; // ブロックの現在の座標
     rotated: number[][];
+    score: number;
 }
 
 export const INITIAL_STATE: IAppState = {
@@ -17,4 +18,5 @@ export const INITIAL_STATE: IAppState = {
     currentX: null, // ブロックの現在の座標
     currentY: null, // ブロックの現在の座標
     rotated: null,
+    score: 0,
 };
