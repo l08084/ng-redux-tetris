@@ -68,6 +68,24 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY
             };
+        case TetrisActions.INCREMENT_CURRENT_X:
+            const newCurrentX = lastState.currentX + 1;
+            return {
+                board: lastState.board,
+                isLose: lastState.isLose,
+                current: lastState.current,
+                currentX: newCurrentX,
+                currentY: lastState.currentY
+            };
+        case TetrisActions.DECREMENT_CURRENT_X:
+            const newCurrentX_b = lastState.currentX - 1;
+            return {
+                board: lastState.board,
+                isLose: lastState.isLose,
+                current: lastState.current,
+                currentX: newCurrentX_b,
+                currentY: lastState.currentY
+            };
         case TetrisActions.INCREMENT_CURRENT_Y:
             const newCurrentY = lastState.currentY + 1;
             return {
@@ -104,7 +122,7 @@ export function rootReducer(
               if (rowFilled) {
                   // その上にあったブロックを一つずつ落としていく
                   for (let yyy = yy; yyy > 0; yyy -= 1) {
-                    for (let xx = 0; xx < this.cols; xx += 1) {
+                    for (let xx = 0; xx < MyConstant.COLS; xx += 1) {
                       newBoard_b[yyy][xx]  = newBoard_b[yyy - 1][xx];
                     }
                   }

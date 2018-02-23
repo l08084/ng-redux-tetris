@@ -20,6 +20,8 @@ export class TetrisActions {
   static readonly SET_CURRENT_X = 'SET_CURRENT_X';
   static readonly SET_CURRENT_Y = 'SET_CURRENT_Y';
   static readonly SET_IS_LOSE = 'SET_IS_LOSE';
+  static readonly INCREMENT_CURRENT_X = 'INCREMENT_CURRENT_X';
+  static readonly DECREMENT_CURRENT_X = 'DECREMENT_CURRENT_X';
   static readonly INCREMENT_CURRENT_Y = 'INCREMENT_CURRENT_Y';
   static readonly FREEZE = 'FREEZE';
   static readonly CLEAR_LINES = 'CLEAR_LINES';
@@ -70,6 +72,18 @@ export class TetrisActions {
   @dispatch() setIsLose = (isLose: boolean): BooleanAction => ({
     type: TetrisActions.SET_IS_LOSE,
     payload: isLose,
+    meta: undefined
+  })
+
+  @dispatch() incrementCurrentX = (): VoidAction => ({
+    type: TetrisActions.INCREMENT_CURRENT_X,
+    payload: undefined,
+    meta: undefined
+  })
+
+  @dispatch() decrementCurrentX = (): VoidAction => ({
+    type: TetrisActions.DECREMENT_CURRENT_X,
+    payload: undefined,
     meta: undefined
   })
 
