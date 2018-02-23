@@ -17,7 +17,7 @@ canvas {
     font-size: 40px;
 }
 
-.score {
+.info {
     position: absolute;
     top: 20%;
     right: 10%;
@@ -26,6 +26,9 @@ canvas {
     font-weight: bold;
     color: #FFFFFF;
     font-size: 25px;
+    .info-child {
+        margin: 10px 0;
+    }
 }
 
 .button-list {

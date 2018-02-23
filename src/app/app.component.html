@@ -1,7 +1,8 @@
 <canvas #campas width='300' height='600'></canvas>
 <div class="title">Angular Redux Tetris</div>
-<div class="score">
-    <div>Score: {{ score$ | async }}</div>
+<div class="info">
+    <div class="info-child">Score: {{ score$ | async }}</div>
+    <div class="info-child">Time:</div>
 </div>
 <div class="button-list">
     <button (click)="controllerService.keyPress('ArrowUp')">Rotate</button>
