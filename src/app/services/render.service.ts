@@ -26,7 +26,7 @@ export class RenderService {
    */
   render() {
     this.context.clearRect(0, 0, MyConstant.BOARD_WIDTH, MyConstant.BOARD_HEIGHT); // 一度キャンバスを真っさらにする
-    this.context.strokeStyle = '#FFFF66'; // えんぴつの色を黒にする
+    this.context.strokeStyle = '#2F2F2F';
 
     Observable.combineLatest(
       this.board$,
@@ -38,7 +38,7 @@ export class RenderService {
         for (let x = 0; x < MyConstant.COLS; x += 1) {
           for (let y = 0; y < MyConstant.ROWS; y += 1) {
             if (board[y][x]) { // マスが空、つまり0ではなかったら
-              this.context.fillStyle = '#18A03C';
+              this.context.fillStyle = '#97D2FB';
               // マスを描画
               this.drawBlock(x, y);
             }
@@ -50,7 +50,7 @@ export class RenderService {
           for (let x = 0; x < 4; x += 1) {
             if (current[y][x]) {
               // マスの種類に合わせて塗りつぶす色を設定
-              this.context.fillStyle = '#18A03C';
+              this.context.fillStyle = '#97D2FB';
               // マスを描画
               this.drawBlock(currentX + x, currentY + y);
             }

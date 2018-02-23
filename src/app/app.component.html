@@ -1,7 +1,5 @@
 <canvas #campas width='300' height='600'></canvas>
-<div class="how-control">
-    <h1 class="title">- HOW TO PLAY-</h1>
-    <p class="detail">Score: {{ score$ | async }}</p>
-    <p class="detail">ブロックの操作: keybord(←→↓)</p>
-    <p class="detail">回転: keybord(space)</p>
+<div class="title">Angular Redux Tetris</div>
+<div class="score">
+    <div>Score: {{ score$ | async }}</div>
 </div>
