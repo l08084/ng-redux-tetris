@@ -4,11 +4,14 @@ import { Observable } from 'rxjs/Observable';
 import { TetrisService } from './tetris.service';
 import { RenderService } from './render.service';
 import { TetrisActions } from '../../../state/actions';
+import { select } from '@angular-redux/store';
 
 @Injectable()
 export class ControllerService {
 
   private controllerSubscription: Subscription;
+
+  @select() readonly rotated$: Observable<number[][]>;
 
   constructor(
     private tetrisAction: TetrisActions,
@@ -46,10 +49,14 @@ export class ControllerService {
           break;
       case 'Space':
         // const rotated = this.rotate(this.current);
-        // if (this.tetrisService.isValid(0, 0, rotated)) {
-          // this.current = rotated;  // 回せる場合は回したあとの状態に操作ブロックをセットする
-          // this.renderService.render();
-        //  }
+        this.tetrisAction.rotate();
+        if (this.tetrisService.isValid(0, 0, this.rotated$)) {
+          // 回せる場合は回したあとの状態に操作ブロックをセットする
+          this.rotated$
+          .subscribe(rotated => this.tetrisAction.initCurrent(rotated))
+          .unsubscribe();
+          this.renderService.render();
+         }
          break;
       default:
         break;

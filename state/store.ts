@@ -7,6 +7,7 @@ export interface IAppState {
     current: number[][]; // 今操作しているブロックの形
     currentX: number; // ブロックの現在の座標
     currentY: number; // ブロックの現在の座標
+    rotated: number[][];
 }
 
 export const INITIAL_STATE: IAppState = {
@@ -14,5 +15,6 @@ export const INITIAL_STATE: IAppState = {
     isLose: false, // 一番上までいっちゃったかどうか
     current: null, // 今操作しているブロックの形
     currentX: null, // ブロックの現在の座標
-    currentY: null // ブロックの現在の座標
+    currentY: null, // ブロックの現在の座標
+    rotated: null,
 };

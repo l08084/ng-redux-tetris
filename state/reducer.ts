@@ -20,7 +20,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: lastState.currentX,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.INIT_CURRENT:
             return {
@@ -28,7 +29,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: (action as NumberMultidimensionalArrayAction).payload,
                 currentX: lastState.currentX,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.INSERT_SHAPE_TO_CURRENT:
             const x = (action as InsertShapeToCurrentAction).payload.x;
@@ -42,7 +44,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: newCurrent,
                 currentX: lastState.currentX,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.SET_CURRENT_X:
             return {
@@ -50,7 +53,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: (action as NumberAction).payload,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.SET_CURRENT_Y:
             return {
@@ -58,7 +62,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: lastState.currentX,
-                currentY: (action as NumberAction).payload
+                currentY: (action as NumberAction).payload,
+                rotated: lastState.rotated,
             };
         case TetrisActions.SET_IS_LOSE:
             return {
@@ -66,7 +71,8 @@ export function rootReducer(
                 isLose: (action as BooleanAction).payload,
                 current: lastState.current,
                 currentX: lastState.currentX,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.INCREMENT_CURRENT_X:
             const newCurrentX = lastState.currentX + 1;
@@ -75,7 +81,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: newCurrentX,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.DECREMENT_CURRENT_X:
             const newCurrentX_b = lastState.currentX - 1;
@@ -84,7 +91,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: newCurrentX_b,
-                currentY: lastState.currentY
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.INCREMENT_CURRENT_Y:
             const newCurrentY = lastState.currentY + 1;
@@ -93,7 +101,8 @@ export function rootReducer(
                 isLose: lastState.isLose,
                 current: lastState.current,
                 currentX: lastState.currentX,
-                currentY: newCurrentY
+                currentY: newCurrentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.FREEZE:
             const newBoard = lastState.board.concat();
@@ -108,6 +117,7 @@ export function rootReducer(
                 current: lastState.current,
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
+                rotated: lastState.rotated,
             };
         case TetrisActions.CLEAR_LINES:
           const newBoard_b = lastState.board.concat();
@@ -134,7 +144,24 @@ export function rootReducer(
               isLose: lastState.isLose,
               current: lastState.current,
               currentX: lastState.currentX,
-              currentY: lastState.currentY
+              currentY: lastState.currentY,
+              rotated: lastState.rotated,
+          };
+        case TetrisActions.ROTATE:
+        const newRotated = [];
+        for (let a = 0; a < 4; a += 1) {
+            newRotated[a] = [];
+            for (let b = 0; b < 4; b += 1) {
+                newRotated[a][b] = lastState.current[3 - b][a];
+            }
+        }
+          return {
+              board: lastState.board,
+              isLose: lastState.isLose,
+              current: lastState.current,
+              currentX: lastState.currentX,
+              currentY: lastState.currentY,
+              rotated: newRotated,
           };
         default:
             return lastState;

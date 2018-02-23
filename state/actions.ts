@@ -25,6 +25,7 @@ export class TetrisActions {
   static readonly INCREMENT_CURRENT_Y = 'INCREMENT_CURRENT_Y';
   static readonly FREEZE = 'FREEZE';
   static readonly CLEAR_LINES = 'CLEAR_LINES';
+  static readonly ROTATE = 'ROTATE';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -101,6 +102,12 @@ export class TetrisActions {
 
   @dispatch() clearLines = (): VoidAction => ({
     type: TetrisActions.CLEAR_LINES,
+    payload: undefined,
+    meta: undefined
+  })
+
+  @dispatch() rotate = (): VoidAction => ({
+    type: TetrisActions.ROTATE,
     payload: undefined,
     meta: undefined
   })
