@@ -49,7 +49,8 @@ export class TetrisService {
     const shape = MyConstant.SHAPES[id];
 
     // 操作ブロック配列に0をセット
-    this.tetrisAction.callInitCurrent();
+    const initCurrent = Array.from(new Array(4), () => new Array(4).fill(0));
+    this.tetrisAction.setCurrent(initCurrent);
     // パターンを操作ブロックへセットする
     for (let y = 0; y < 4; y += 1) {
       for (let x = 0; x < 4; x += 1) {

@@ -15,7 +15,7 @@ export type FreezeAction = FluxStandardAction<Point, void>;
 @Injectable()
 export class TetrisActions {
   static readonly INIT_BOARD = 'INIT_BOARD';
-  static readonly INIT_CURRENT = 'INIT_CURRENT';
+  static readonly SET_CURRENT = 'SET_CURRENT';
   static readonly INSERT_SHAPE_TO_CURRENT = 'INSERT_SHAPE_TO_CURRENT';
   static readonly SET_CURRENT_X = 'SET_CURRENT_X';
   static readonly SET_CURRENT_Y = 'SET_CURRENT_Y';
@@ -33,20 +33,14 @@ export class TetrisActions {
     this.initBoard(board);
   }
 
-  callInitCurrent = (): void => {
-    // 2次元配列に0を代入する
-    const current = Array.from(new Array(4), () => new Array(4).fill(0));
-    this.initCurrent(current);
-  }
-
   @dispatch() initBoard = (board: number[][]): NumberMultidimensionalArrayAction => ({
       type: TetrisActions.INIT_BOARD,
       payload: board,
       meta: undefined
   })
 
-  @dispatch() initCurrent = (current: number[][]): NumberMultidimensionalArrayAction => ({
-    type: TetrisActions.INIT_CURRENT,
+  @dispatch() setCurrent = (current: number[][]): NumberMultidimensionalArrayAction => ({
+    type: TetrisActions.SET_CURRENT,
     payload: current,
     meta: undefined
   })

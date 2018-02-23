@@ -48,12 +48,11 @@ export class ControllerService {
          }
           break;
       case 'Space':
-        // const rotated = this.rotate(this.current);
         this.tetrisAction.rotate();
         if (this.tetrisService.isValid(0, 0, this.rotated$)) {
           // 回せる場合は回したあとの状態に操作ブロックをセットする
           this.rotated$
-          .subscribe(rotated => this.tetrisAction.initCurrent(rotated))
+          .subscribe(rotated => this.tetrisAction.setCurrent(rotated))
           .unsubscribe();
           this.renderService.render();
          }

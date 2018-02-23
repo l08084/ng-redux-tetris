@@ -23,7 +23,7 @@ export function rootReducer(
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
             };
-        case TetrisActions.INIT_CURRENT:
+        case TetrisActions.SET_CURRENT:
             return {
                 board: lastState.board,
                 isLose: lastState.isLose,
