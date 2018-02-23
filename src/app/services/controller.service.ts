@@ -23,12 +23,12 @@ export class ControllerService {
     this.controllerSubscription
       = Observable.fromEvent(document, 'keydown')
       .subscribe((e: KeyboardEvent) => {
-        this.keyPress(e);
+        this.keyPress(e.code);
       });
   }
 
-  keyPress = (event: KeyboardEvent): void => {
-    switch (event.code) {
+  keyPress = (eventCode: string): void => {
+    switch (eventCode) {
       case 'ArrowLeft':
        if (this.tetrisService.isValid(-1)) {
          this.tetrisAction.decrementCurrentX(); // 左に一つずらす
