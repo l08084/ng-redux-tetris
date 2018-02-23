@@ -47,7 +47,7 @@ export class ControllerService {
            this.renderService.render();
          }
           break;
-      case 'Space':
+      case 'ArrowUp':
         this.tetrisAction.rotate();
         if (this.tetrisService.isValid(0, 0, this.rotated$)) {
           // 回せる場合は回したあとの状態に操作ブロックをセットする
