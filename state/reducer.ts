@@ -198,7 +198,7 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: 0,
+                score: lastState.score,
                 digitalTimer: (action as StringAction).payload,
             };
             default:
