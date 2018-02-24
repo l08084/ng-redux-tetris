@@ -10,6 +10,7 @@ export interface IAppState {
     rotated: number[][];
     score: number;
     digitalTimer: string;
+    isGameStart: boolean;
 }
 
 export const INITIAL_STATE: IAppState = {
@@ -21,4 +22,5 @@ export const INITIAL_STATE: IAppState = {
     rotated: null,
     score: 0,
     digitalTimer: '0:0:00',
+    isGameStart: false,
 };

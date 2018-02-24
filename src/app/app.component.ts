@@ -17,15 +17,18 @@ import { ControllerService } from './services/controller.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
 
   @select() readonly board$: Observable<number[][]>;
   @select() readonly score$: Observable<number>;
   @select() readonly digitalTimer$: Observable<number>;
+  @select() readonly isGameStart$: Observable<boolean>;
+
   @ViewChild('campas') campas;
 
   private renderSubscription: Subscription;
   private timerSubscription: Subscription;
+  private controllerSubscription: Subscription;
 
   constructor(
     private tetrisAction: TetrisActions,
@@ -37,11 +40,28 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.renderSubscription.unsubscribe();
     this.timerSubscription.unsubscribe();
+    this.controllerSubscription.unsubscribe();
   }
 
   ngOnInit() {
+    this.controllerSubscription
+      = Observable.fromEvent(document, 'keydown')
+      .subscribe((e: KeyboardEvent) => {
+        this.callGameStart(e.code);
+        this.controllerService.keyPress(e.code);
+      });
+  }
+
+  callGameStart = (eventCode: string): void => {
+    if (eventCode !== 'Space') {
+      return;
+    }
+    this.tetrisAction.gameStart();
+    setTimeout(() => this.gameSetting(), 1000);
+  }
+
+  gameSetting = (): void => {
     this.tetrisService.newGame();
-    this.controllerService.init();
     let time = 0;
     this.timerSubscription = Observable.interval(100).subscribe(
       () => {
@@ -50,9 +70,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           .updateTime(`${Math.floor(time / 600)}:${Math.floor((time / 10) % 60)}:${(time % 10)}0`);
       }
     );
-  }
-
-  ngAfterViewInit() {
     const canvas = this.campas.nativeElement;
     const context = canvas.getContext('2d');
     this.renderService.setContext(context);

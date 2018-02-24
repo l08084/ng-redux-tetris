@@ -1,12 +1,19 @@
-<canvas #campas width='300' height='600'></canvas>
-<div class="title">Angular Redux Tetris</div>
-<div class="info">
-    <div class="info-child">Score: {{ score$ | async }}</div>
-    <div class="info-child">Time:</div>
-    <div class="info-child">{{ digitalTimer$ | async }}</div>
+<div class="title">
+    <h1 class="big">Angular Redux Tetris</h1>
+    <h2 *ngIf="!(isGameStart$ | async)"
+        class="flash">Press spacebar to start the game</h2>
 </div>
-<div class="button-list">
-    <button (click)="controllerService.keyPress('ArrowUp')">Rotate</button>
-    <button (click)="controllerService.keyPress('ArrowRight')">Right</button>
-    <button (click)="controllerService.keyPress('ArrowLeft')">Left</button>
+<div *ngIf="isGameStart$ | async">
+    <canvas #campas width='300' height='600'></canvas>
+    <div class="info">
+        <div class="info-child">Score: {{ score$ | async }}</div>
+        <div class="info-child">Time:</div>
+        <div class="info-child">{{ digitalTimer$ | async }}</div>
+    </div>
+    <div class="button-list">
+        <button (click)="controllerService.keyPress('ArrowUp')">Rotate</button>
+        <button (click)="controllerService.keyPress('ArrowRight')">Right</button>
+        <button (click)="controllerService.keyPress('ArrowLeft')">Left</button>
+        <!-- <button (click)="controllerService.keyPress('ArrowLeft')">Pause</button> -->
+    </div>
 </div>

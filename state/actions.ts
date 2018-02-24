@@ -28,6 +28,7 @@ export class TetrisActions {
   static readonly CLEAR_LINES = 'CLEAR_LINES';
   static readonly ROTATE = 'ROTATE';
   static readonly UPDATE_TIME = 'UPDATE_TIME';
+  static readonly GAME_START = 'GAME_START';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -111,6 +112,12 @@ export class TetrisActions {
   @dispatch() updateTime = (time: string): StringAction => ({
     type: TetrisActions.UPDATE_TIME,
     payload: time,
+    meta: undefined
+  })
+
+  @dispatch() gameStart = (): VoidAction => ({
+    type: TetrisActions.GAME_START,
+    payload: undefined,
     meta: undefined
   })
 }

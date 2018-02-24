@@ -19,14 +19,6 @@ export class ControllerService {
     private renderService: RenderService,
   ) { }
 
-  init = (): void => {
-    this.controllerSubscription
-      = Observable.fromEvent(document, 'keydown')
-      .subscribe((e: KeyboardEvent) => {
-        this.keyPress(e.code);
-      });
-  }
-
   keyPress = (eventCode: string): void => {
     switch (eventCode) {
       case 'ArrowLeft':
