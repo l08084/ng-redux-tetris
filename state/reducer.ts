@@ -5,7 +5,8 @@ import { TetrisActions,
          NumberMultidimensionalArrayAction,
          InsertShapeToCurrentAction,
          NumberAction,
-         BooleanAction} from './actions';
+         BooleanAction,
+         StringAction} from './actions';
 import { MyConstant } from '../src/app/constant';
 import { Point } from '../src/app/model';
 
@@ -22,7 +23,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: 0
+                score: 0,
+                digitalTimer: '0:0:00',
             };
         case TetrisActions.SET_CURRENT:
             return {
@@ -32,7 +34,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.INSERT_SHAPE_TO_CURRENT:
             const x = (action as InsertShapeToCurrentAction).payload.x;
@@ -48,7 +51,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.SET_CURRENT_X:
             return {
@@ -58,7 +62,8 @@ export function rootReducer(
                 currentX: (action as NumberAction).payload,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.SET_CURRENT_Y:
             return {
@@ -68,7 +73,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: (action as NumberAction).payload,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.SET_IS_LOSE:
             return {
@@ -78,7 +84,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.INCREMENT_CURRENT_X:
             const newCurrentX = lastState.currentX + 1;
@@ -89,7 +96,8 @@ export function rootReducer(
                 currentX: newCurrentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.DECREMENT_CURRENT_X:
             const newCurrentX_b = lastState.currentX - 1;
@@ -100,7 +108,8 @@ export function rootReducer(
                 currentX: newCurrentX_b,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.INCREMENT_CURRENT_Y:
             const newCurrentY = lastState.currentY + 1;
@@ -111,7 +120,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: newCurrentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.FREEZE:
             const newBoard = lastState.board.concat();
@@ -127,7 +137,8 @@ export function rootReducer(
                 currentX: lastState.currentX,
                 currentY: lastState.currentY,
                 rotated: lastState.rotated,
-                score: lastState.score
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
             };
         case TetrisActions.CLEAR_LINES:
           const newBoard_b = lastState.board.concat();
@@ -158,26 +169,39 @@ export function rootReducer(
               currentX: lastState.currentX,
               currentY: lastState.currentY,
               rotated: lastState.rotated,
-              score: newScore
+              score: newScore,
+              digitalTimer: lastState.digitalTimer,
           };
         case TetrisActions.ROTATE:
-        const newRotated = [];
-        for (let a = 0; a < 4; a += 1) {
-            newRotated[a] = [];
-            for (let b = 0; b < 4; b += 1) {
-                newRotated[a][b] = lastState.current[3 - b][a];
+            const newRotated = [];
+            for (let a = 0; a < 4; a += 1) {
+                newRotated[a] = [];
+                for (let b = 0; b < 4; b += 1) {
+                    newRotated[a][b] = lastState.current[3 - b][a];
+                }
             }
-        }
-          return {
-              board: lastState.board,
-              isLose: lastState.isLose,
-              current: lastState.current,
-              currentX: lastState.currentX,
-              currentY: lastState.currentY,
-              rotated: newRotated,
-              score: lastState.score
-          };
-        default:
-            return lastState;
+            return {
+                board: lastState.board,
+                isLose: lastState.isLose,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: lastState.currentY,
+                rotated: newRotated,
+                score: lastState.score,
+                digitalTimer: lastState.digitalTimer,
+            };
+        case TetrisActions.UPDATE_TIME:
+            return {
+                board: lastState.board,
+                isLose: lastState.isLose,
+                current: lastState.current,
+                currentX: lastState.currentX,
+                currentY: lastState.currentY,
+                rotated: lastState.rotated,
+                score: 0,
+                digitalTimer: (action as StringAction).payload,
+            };
+            default:
+                return lastState;
     }
 }

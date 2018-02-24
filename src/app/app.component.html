@@ -3,6 +3,7 @@
 <div class="info">
     <div class="info-child">Score: {{ score$ | async }}</div>
     <div class="info-child">Time:</div>
+    <div class="info-child">{{ digitalTimer$ | async }}</div>
 </div>
 <div class="button-list">
     <button (click)="controllerService.keyPress('ArrowUp')">Rotate</button>

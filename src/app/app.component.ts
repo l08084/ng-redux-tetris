@@ -21,9 +21,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @select() readonly board$: Observable<number[][]>;
   @select() readonly score$: Observable<number>;
+  @select() readonly digitalTimer$: Observable<number>;
   @ViewChild('campas') campas;
 
   private renderSubscription: Subscription;
+  private timerSubscription: Subscription;
 
   constructor(
     private tetrisAction: TetrisActions,
@@ -34,11 +36,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.renderSubscription.unsubscribe();
+    this.timerSubscription.unsubscribe();
   }
 
   ngOnInit() {
     this.tetrisService.newGame();
     this.controllerService.init();
+    let time = 0;
+    this.timerSubscription = Observable.interval(100).subscribe(
+      () => {
+        time += 1;
+        this.tetrisAction
+          .updateTime(`${Math.floor(time / 600)}:${Math.floor((time / 10) % 60)}:${(time % 10)}0`);
+      }
+    );
   }
 
   ngAfterViewInit() {

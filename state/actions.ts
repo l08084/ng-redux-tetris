@@ -6,6 +6,7 @@ import { IAppState } from './store';
 import { InsertShapeToCurrentParam, Point } from '../src/app/model';
 
 export type VoidAction = FluxStandardAction<void, void>;
+export type StringAction = FluxStandardAction<string, void>;
 export type NumberAction = FluxStandardAction<number, void>;
 export type BooleanAction = FluxStandardAction<boolean, void>;
 export type NumberMultidimensionalArrayAction = FluxStandardAction<number[][], void>;
@@ -26,6 +27,7 @@ export class TetrisActions {
   static readonly FREEZE = 'FREEZE';
   static readonly CLEAR_LINES = 'CLEAR_LINES';
   static readonly ROTATE = 'ROTATE';
+  static readonly UPDATE_TIME = 'UPDATE_TIME';
 
   callInitBoard = (): void => {
     // 2次元配列に0を代入する
@@ -103,6 +105,12 @@ export class TetrisActions {
   @dispatch() rotate = (): VoidAction => ({
     type: TetrisActions.ROTATE,
     payload: undefined,
+    meta: undefined
+  })
+
+  @dispatch() updateTime = (time: string): StringAction => ({
+    type: TetrisActions.UPDATE_TIME,
+    payload: time,
     meta: undefined
   })
 }
