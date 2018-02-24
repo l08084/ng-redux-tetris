@@ -1,9 +1,8 @@
 <div class="title">
     <h1 class="big">Angular Redux Tetris</h1>
-    <h2 *ngIf="!(isGameStart$ | async)"
-        class="flash">Press spacebar to start the game</h2>
+    <h2 *ngIf="!(isGameStart$ | async); else tetrisBlock" class="flash">Press spacebar to start the game</h2>
 </div>
-<div *ngIf="isGameStart$ | async">
+<ng-template #tetrisBlock>
     <canvas #campas width='300' height='600'></canvas>
     <div class="info">
         <div class="info-child">Score: {{ score$ | async }}</div>
@@ -16,4 +15,4 @@
         <button (click)="controllerService.keyPress('ArrowLeft')">Left</button>
         <!-- <button (click)="controllerService.keyPress('ArrowLeft')">Pause</button> -->
     </div>
-</div>
+</ng-template>

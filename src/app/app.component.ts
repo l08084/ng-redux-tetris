@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
       return;
     }
     this.tetrisAction.gameStart();
-    setTimeout(() => this.gameSetting(), 1000);
+    setTimeout(() => this.gameSetting(), 500);
   }
 
   gameSetting = (): void => {
