@@ -7,7 +7,7 @@ Run Things Locally
 ------------------
 
 ```bash
-git clone git@github.com:l08084/ng-redux-tetris.git
+git clone https://github.com/l08084/ng-redux-tetris
 cd ng-redux-tetris
 npm install -g @angular/cli
 npm install
